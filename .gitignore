@@ -1,0 +1,8 @@
+node_modules
+DP-SkiGlideTestingServer.njsproj
+DP-SkiGlideTestingServer.njsproj.user
+.env
+obj
+bin
+nodemonLiveServer.bat
+coverage
