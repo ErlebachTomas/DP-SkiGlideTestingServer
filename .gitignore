@@ -5,4 +5,7 @@ DP-SkiGlideTestingServer.njsproj.user
 obj
 bin
 nodemonLiveServer.bat
+nodemonLiveServerNotebook.bat
+test.bat
 coverage
+test_report

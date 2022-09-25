@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "9c588939-e723-4d4d-8877-a7208ac3b2d5",
+		"name": "DP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "10761241"
+	},
+	"item": [
+		{
+			"name": "getAllUsersSki",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{url}}/api/getAllUsersSki?user={{userID}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"getAllUsersSki"
+					],
+					"query": [
+						{
+							"key": "user",
+							"value": "{{userID}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test GET",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "key",
+							"value": "Val",
+							"type": "text"
+						}
+					]
+				},
+				"url": "{{url}}/api/"
+			},
+			"response": []
+		},
+		{
+			"name": "Test POST",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "Key",
+							"value": "Value",
+							"type": "text"
+						}
+					]
+				},
+				"url": "{{url}}/api/"
+			},
+			"response": []
+		}
+	]
+}
