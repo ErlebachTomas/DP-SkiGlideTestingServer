@@ -1,20 +1,18 @@
-const app = require('./server');
+ï»¿const app = require('./server');
 const request = require('supertest');
 
 const mongoose = require('mongoose');
-afterAll(async () => { mongoose.connection.close(); }); //ukonèit db spojení po testech
 
-
-describe('Demo test Suite 1', function () {
-    it("Test 1 - This shouldn't fail", function () {
-        expect(1 === 1).toBeTruthy();
-    });
+/** ukonÄit db spojenÃ­ po testech */
+afterAll(async () => {
+    await mongoose.disconnect();
+    await mongoose.connection.close();
 });
 
+/* === TESTY === */
+describe('Test public API', function () {
 
-describe('Test API', function () {
-
-    test("seznam uživatelù", async () => {
+    test("seznam uÅ¾ivatelÅ¯", async () => {
 
         const res = await request(app).get("/api/getAllUsers");
         expect(res.statusCode).toEqual(200);
@@ -23,18 +21,25 @@ describe('Test API', function () {
         // expect(res.body[0]).toHaveProperty("name");
     });
 
+    test("/getAllUsersSki", async () => {
+        const res = await request(app).get("/api/getAllUsersSki");
+        expect(res.statusCode).toEqual(200);       
+    });    
+
 });
 
 /* Auth0 tests */
 //TODO https://auth0.com/docs/quickstart/backend/nodejs/interactive
-
 const token = process.env.TOKEN;
-console.log(token)
 
-describe('GET', function () {
+describe('Auth0', function () {
 
-    it('get + auth', function () {       
-        expect(true).toBeTruthy();
+    it('get + Bearer auth', function () {       
+        const res =  await request(app)
+            .get('/api/private')           
+            .set('Authorization', `Bearer ${token}`);
+
+        expect(res.statusCode).toEqual(200);        
     });
 
 });

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node app",
+    "dev": "nodemon app.js",
     "test": "jest --verbose ./test --detectOpenHandles --runInBand --forceExit --setupFiles dotenv/config"
   },
   "jest": {

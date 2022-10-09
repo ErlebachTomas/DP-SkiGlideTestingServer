@@ -48,7 +48,7 @@ router.post('/addTestSession', testSessionController.insertTestSession)
 // This route needs authentication
 router.get('/private', checkJwt, function (req, res) {
     res.json({
-        message: 'Hello from a private endpoint! You need to be authenticated to see this.'
+        message: 'Hello from a private endpoint!'
     });
 });
 
