@@ -1,5 +1,9 @@
-﻿extends layout
+﻿extends head
 
 block content
-  h1= title
-  p Welcome to #{title} API
+  
+  main.container.pt-2.mx-auto(style='width: 500px;')
+        h1 Home page        
+        button#btn-login.btn.btn-lg.btn-block.m-2.btn-primary(disabled='true' onclick='login()') Log in
+        button#btn-logout.btn.btn-lg.btn-block.m-2.btn-secondary(disabled='true' onclick='logout()') Log out
+        section#info.mx-auto
