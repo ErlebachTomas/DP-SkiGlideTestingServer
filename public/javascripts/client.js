@@ -11,7 +11,15 @@ $(async function () {
     let isAuthenticated = await checkIfUserIsAuthenticated();
 
     updateUI(isAuthenticated);
-    
+
+    $("#ApiCall").click(async function () {
+        // api call 
+        console.log($("#ApiPath").val());
+        let data = await callApi($("#ApiPath").val());
+        console.log(data);
+        $("#ApiResponse").text(JSON.stringify(data, null, 2));
+    });
+
 });
 
 /**
@@ -54,7 +62,8 @@ async function configureClient() {
 
     auth0 = await createAuth0Client({
         domain: config.domain,
-        client_id: config.clientId
+        client_id: config.clientId,
+        audience: config.audience
     });
 }
 
@@ -108,7 +117,8 @@ async function updateUI(isAuthenticated) {
         $("#btn-login").removeClass("btn-primary");
         $("#btn-login").addClass("btn-secondary");
 
-        
+        $("#api").removeClass("hidden");
+
         const user = await auth0.getUser();
 
         let data = JSON.stringify(user, null, 2);
@@ -116,6 +126,7 @@ async function updateUI(isAuthenticated) {
         $("#info").append("<button class='btn btn-outline-dark'>Import dat z csv</button>");
 
     } else {
+        $("#api").addClass("hidden");
 
         $("#btn-login").removeClass("btn-secondary");
         $("#btn-login").addClass("btn-primary");
@@ -126,4 +137,36 @@ async function updateUI(isAuthenticated) {
 
 }
 
+/**
+ * Test API
+ * @param {string} path
+ * @return {json} data
+ */
+async function callApi(path) {
+    // undone throw err a osetřit v UI
+    try {
+        const token = await auth0.getTokenSilently();
+        console.log(token);
+        let response = await fetch(path, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
 
+        let responseData = await response.json();
+        return responseData;
+
+    } catch (err) {
+        console.error("api call failed", err);
+
+        let msg = {
+            "api call failed": err.toString()
+        };
+        return msg;
+
+    }
+   
+} 
+
+
+// DO api CALL: https://manage.auth0.com/dashboard/us/dev-uzy9mju6/applications/aQF4pxyekrY7B77gb4XSx8YGMDZ489xF/quickstart

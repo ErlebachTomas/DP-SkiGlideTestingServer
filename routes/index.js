@@ -20,7 +20,8 @@ router.get('/auth_config.json', function (req, res) {
 
     res.json({
         domain: process.env.Auth_domain,
-        clientId: process.env.Auth_clientId
+        clientId: process.env.Auth_clientId,
+        audience: process.env.API_IDENTIFIER
     });
 });
 

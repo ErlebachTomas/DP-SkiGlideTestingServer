@@ -15,9 +15,10 @@ const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
 // Authorization middleware. When used, the Access Token must
 // exist and be verified against the Auth0 JSON Web Key Set.
 const checkJwt = auth({
-    audience: 'https://ngrok-router.herokuapp.com', // YOUR_API_IDENTIFIER
-    issuerBaseURL: 'https://dev-uzy9mju6.us.auth0.com/',
+    audience: process.env.API_IDENTIFIER,  
+    issuerBaseURL: 'https://' + process.env.Auth_domain
 });
+
 
 //  This routes doesn't need authentication 
 
@@ -38,7 +39,7 @@ router.get('/getAllUsersSki', skiController.getAllUsersSki);
 
 
 /* todo remove test */
-router.get('/data', function (req, res) {
+router.get('/data', function (req, res) {   
     res.json({ data: 'test' });
 });
 
