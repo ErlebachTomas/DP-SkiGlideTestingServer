@@ -9,8 +9,9 @@ const apiRouter = require('../routes/api');
 const server = express();
 server.use(express.json());
 
-server.use('/', routes);
-server.use('/api', apiRouter);
+
+server.use('/', routes); // web client
+server.use('/api', apiRouter); // api
 
 
 // dbs conn

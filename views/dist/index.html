@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8">
+    <title>Ski Glide testing</title>
+    <!-- - Boostrap Template-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous">
+    <!-- - Jquery-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" crossorigin="anonymous">
+      <!-- https://github.com/evanplaice/jquery-csv/-->
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.21/jquery.csv.min.js" crossorigin="anonymous"> </script>
+    <!-- - Auth-->
+    <script src="https://cdn.auth0.com/js/auth0-spa-js/1.20/auth0-spa-js.production.js" crossorigin="anonymous"></script>
+    <!-- local js-->
+    <script src="javascripts/client.js" type="text/javascript"></script>
+    <!-- - css-->
+    <link rel="stylesheet" href="/stylesheets/main.css">
+  </head>
+  <body>
+    <main class="container pt-2 mx-auto" style="width: 500px;">
+      <section> 
+        <h1>Home page        </h1>
+        <button class="btn btn-lg btn-block m-2 btn-primary" id="btn-login" disabled="true" onclick="login()">Log in</button>
+        <button class="btn btn-lg btn-block m-2 btn-secondary" id="btn-logout" disabled="true" onclick="logout()">Log out</button>
+        <section class="mx-auto" id="info"> </section>
+      </section>
+      <section class="hidden mt-3" id="api">
+        <select class="form-select" id="ApiPath" name="path">          
+          <option value="/api/data">GET data</option>
+          <option value="/api/">GET / (ping) </option>
+          <option value="/api/private">GET private data (requere token)          </option>
+          <option value="/api/private-scoped">GET data (scope and authenticated)</option>
+          <option value="/api/getAllUsersSki">GET getAllUsersSki </option>
+        </select>
+        <button class="btn btn-outline-primary" id="ApiCall">Odeslat</button>
+        <pre class="mt-2" id="ApiResponse"></pre>
+      </section>
+      <section class="hidden mt-3" id="file"> 
+        <p>Import dat z csv </p>
+        <input class="btn btn-outline-black" id="inputFile" type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.csv">
+        <div id="preview"></div>
+      </section>
+    </main>
+  </body>
+</html>

@@ -14,7 +14,7 @@ router.get('/info', function (req, res) {
 
 
 /**
- * Provide Auth configuration
+ * Provide Auth configuration file
  */
 router.get('/auth_config.json', function (req, res) {
 

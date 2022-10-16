@@ -4,8 +4,6 @@ let auth0 = null; // variable hold the Auth0 client object
 /* Single page */
 $(async function () {
 
-    console.log("ok, document ready!!!");
-
     await configureClient();
 
     let isAuthenticated = await checkIfUserIsAuthenticated();
@@ -19,7 +17,6 @@ $(async function () {
         console.log(data);
         $("#ApiResponse").text(JSON.stringify(data, null, 2));
     });
-
 });
 
 /**
@@ -81,15 +78,15 @@ async function login() {
         await auth0.loginWithRedirect(options);
 
     } catch (err) {
-            console.log("Log in failed", err);
+        console.log("Log in failed", err);
     }
 
 }
 /**
  * Odhlášení uživatele */
-async function logout() { 
+async function logout() {
 
-    try {       
+    try {
         auth0.logout({
             returnTo: window.location.origin
         });
@@ -104,7 +101,7 @@ async function logout() {
  */
 async function updateUI(isAuthenticated) {
 
-    $("#btn-logout").prop("disabled", !isAuthenticated);   
+    $("#btn-logout").prop("disabled", !isAuthenticated);
     $("#btn-login").prop("disabled", isAuthenticated);
 
     let info = isAuthenticated ? "Přihlášen" : "Nepřihlášen"
@@ -118,15 +115,16 @@ async function updateUI(isAuthenticated) {
         $("#btn-login").addClass("btn-secondary");
 
         $("#api").removeClass("hidden");
+        $("#file").removeClass("hidden");
 
         const user = await auth0.getUser();
 
         let data = JSON.stringify(user, null, 2);
         $("#info").append("<pre id='json'>" + data + "</pre>");
-        $("#info").append("<button class='btn btn-outline-dark'>Import dat z csv</button>");
 
     } else {
         $("#api").addClass("hidden");
+        $("#file").addClass("hidden");
 
         $("#btn-login").removeClass("btn-secondary");
         $("#btn-login").addClass("btn-primary");
@@ -165,8 +163,57 @@ async function callApi(path) {
         return msg;
 
     }
-   
-} 
+}
 
 
-// DO api CALL: https://manage.auth0.com/dashboard/us/dev-uzy9mju6/applications/aQF4pxyekrY7B77gb4XSx8YGMDZ489xF/quickstart
+function XLSXToJson(file) {
+
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+        var data = e.target.result;
+        var workbook = XLSX.read(data, {
+            type: 'binary'
+        });
+
+        let objects = [];
+        workbook.SheetNames.forEach(function (sheetName) {
+
+            var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+            var json_object = JSON.stringify(XL_row_object);
+
+            objects.push(json_object);
+        });
+        
+        $("#preview").html(objects);// callback
+
+    };
+    reader.onerror = function (ex) {
+        console.log(ex);
+
+    };
+
+    reader.readAsBinaryString(file);
+
+};
+
+
+async function processFile() {
+
+    let file = $("#inputFile")[0].files[0]
+
+
+    switch (chectFileType(file.name)) {
+        case "csv":
+            $("#preview").html("zatím nepodporováno");
+            break;
+        default:
+            XLSXToJson(file);
+    }
+
+}
+
+function chectFileType(filename) {
+    return filename.split('.').pop();
+}
+

@@ -18,3 +18,10 @@ block content
         option(value='/api/getAllUsersSki') GET getAllUsersSki 
       button#ApiCall.btn.btn-outline-primary Odeslat
       pre#ApiResponse.mt-2
+    
+    section#file.hidden.mt-3 
+      
+      label.file-upload
+        input#inputFile(type='file' onchange='processFile()' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.csv')         
+        | Import dat z Excelu
+      pre#preview
