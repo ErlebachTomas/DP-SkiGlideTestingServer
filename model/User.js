@@ -6,6 +6,10 @@ let UserSchema = new mongoose.Schema({
         type: String,
         require: true,
         unique: true,
+    },
+    updated_at: {
+        type: String,
+        require: false,
     }
 });
 

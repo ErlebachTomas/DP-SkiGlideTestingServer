@@ -19,8 +19,12 @@ let TestSession = new mongoose.Schema({
         type: Number,
         required: true
     },
-    humidity: Number
-
+    humidity: Number,
+     
+    updated_at: {
+        type: String,
+        require: false,
+    }
 });
 
 module.exports = mongoose.model('TestSession', TestSession);

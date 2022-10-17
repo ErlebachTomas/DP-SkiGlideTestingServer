@@ -46,6 +46,12 @@ router.get('/data', function (req, res) {
 router.post('/addTestSession', testSessionController.insertTestSession)
 
 
+router.post('/addTests', function (req, res) {
+    res.json({ data: 'test' }); //DO controller
+});
+
+
+
 // This route needs authentication
 router.get('/private', checkJwt, function (req, res) {
     res.json({

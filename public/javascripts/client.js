@@ -17,6 +17,12 @@ $(async function () {
         console.log(data);
         $("#ApiResponse").text(JSON.stringify(data, null, 2));
     });
+
+
+    $("#uploadDataForm").submit(function (e) {
+        e.preventDefault(); //prevent Default functionality
+        upload();
+    });
 });
 
 /**
@@ -55,7 +61,7 @@ async function configureClient() {
     const response = await fetch("/auth_config.json");
     const config = await response.json();
 
-    console.log(config);
+    //console.log(config);
 
     auth0 = await createAuth0Client({
         domain: config.domain,
@@ -100,7 +106,7 @@ async function logout() {
  * @param {bool} isAuthenticated true pokud je uživatel přihlášen
  */
 async function updateUI(isAuthenticated) {
-
+       
     $("#btn-logout").prop("disabled", !isAuthenticated);
     $("#btn-login").prop("disabled", isAuthenticated);
 
@@ -165,7 +171,10 @@ async function callApi(path) {
     }
 }
 
-
+/**
+ * Převede sešity z Excelu na pole Json objektů a vypíše obsah na stránku
+ * @param {any} file soubor
+ */
 function XLSXToJson(file) {
 
     var reader = new FileReader();
@@ -185,7 +194,12 @@ function XLSXToJson(file) {
             objects.push(json_object);
         });
         
-        $("#preview").html(objects);// callback
+        objects.forEach(function (item) {
+            // undone hromadné zpracování z více listů
+            $("#preview").html(item);
+            console.log(item);
+
+        });        
 
     };
     reader.onerror = function (ex) {
@@ -197,8 +211,10 @@ function XLSXToJson(file) {
 
 };
 
-
-async function processFile() {
+/**
+ * Zpracuje soubor vložený na stránku
+ * */
+function processFile() {
 
     let file = $("#inputFile")[0].files[0]
 
@@ -209,11 +225,61 @@ async function processFile() {
             break;
         default:
             XLSXToJson(file);
+            $("#btn-post").prop("disabled", false);
     }
 
 }
 
+/**
+ * Vrátí koncovku souboru
+ * @param String filename název souboru 
+ */
 function chectFileType(filename) {
     return filename.split('.').pop();
 }
+
+/**
+ * Odešle data na server
+ * @param Json data
+ */
+async function postDataToServer(url,data) {
+
+    try {
+        const token = await auth0.getTokenSilently();
+        fetch(url, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(res => {
+            console.log("Complete! response:", res);
+            $("#preview").html(res);
+        });
+
+
+    } catch (err) {
+        console.error("api call failed", err);
+    }
+
+}
+
+async function upload() {
+
+    var data = {
+        user: await auth0.getUser(),
+        airTemperature: $("#airTemperature").val(),
+        snowTemperature: $("#snowTemperature").val(),
+        snowType: $("#snowType").find(":selected").val(),
+        skiRide: $("#preview").html(),
+        note: $("#note").val(),
+        datetime: $("#date").val()
+    };
+    
+    postDataToServer("/api/uploadData", data)
+    
+} 
+
+
 

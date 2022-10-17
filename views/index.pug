@@ -2,26 +2,61 @@
 
 block content 
 
-  main.container.pt-2.mx-auto(style='width: 500px;')
-    section  
+  main.container.pt-2.mx-auto(style='width: 600px;')
+    section
       h1 Home page        
       button#btn-login.btn.btn-lg.btn-block.m-2.btn-primary(disabled='true' onclick='login()') Log in
       button#btn-logout.btn.btn-lg.btn-block.m-2.btn-secondary(disabled='true' onclick='logout()') Log out
-      section#info.mx-auto  
-    
-    section#api.hidden.mt-3
+      button#btn-export.btn.btn-lg.m-2(disabled='true') Export dat 
+        i.fa-solid.fa-download
+      div#info.mx-auto 
+
+    section#api.hidden.mt-3.card.p-3.bg-light
+      h3 Test API
       select#ApiPath.form-select(name='path')           
         option(value='/api/data') GET data
         option(value='/api/') GET / (ping) 
         option(value='/api/private') GET private data (requere token)          
         option(value='/api/private-scoped') GET data (scope and authenticated)
         option(value='/api/getAllUsersSki') GET getAllUsersSki 
-      button#ApiCall.btn.btn-outline-primary Odeslat
+      button#ApiCall.btn.btn-outline-primary.mt-2 Odeslat
       pre#ApiResponse.mt-2
-    
+
     section#file.hidden.mt-3 
+      form#uploadDataForm.card.p-3.bg-light
+        h3 Import dat z měření
+        .form-group.mb-3
+          label.font-weight-bold(for='airTemperature') Teplota vzduchu
+          input#airTemperature.form-control(type='number' step='any' placeholder='°C')
+        .form-group.mb-3
+          label.font-weight-bold(for='snowTemperature') Teplota sněhu
+          input#snowTemperature.form-control(type='number' step='any' placeholder='°C')
+        .form-group.mb-3
+          label.font-weight-bold(for='snowTemperature') Vlhkost
+          input#snowTemperature.form-control(type='number' step='any' placeholder='%')
+        .form-group.mb-3
+          label.font-weight-bold(for='note') Poznámka
+          textarea#note.form-control(rows='3')
+        .input-group.mb-3
+          .input-group-prepend
+            label.input-group-text(for='snowType') Typ sněhu:
+          select#snowType.form-select
+              option(selected='') Výběr
+              option(value='1') Čerstvě napadaný prašan
+              option(value='2') Hranatozrnitý sníh
+              option(value='3') Umělý sníh
+              option(value='4') Hruboznný sníh
+              option(value='5') Jemnozrnný sníh
+              option(value='6') Starý (transformovaný) sníh
+          // todo load from api    
+        .form-group.mb-3
+          label.font-weight-bold(for='note') Čas
+          .input-group.date            
+            input#date.form-control(type='datetime-local' step='60')  
+        .form-group.mb-3     
+          label.file-upload Import záznamů testů lyží z Excelu:
+          input#inputFile(type='file' onchange='processFile()' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.csv') 
+          pre#preview
+        input#btn-post.btn.btn-primary.btn-block.mb-3(type='submit' disabled='true' value='Odeslat')  
       
-      label.file-upload
-        input#inputFile(type='file' onchange='processFile()' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.csv')         
-        | Import dat z Excelu
-      pre#preview
+            

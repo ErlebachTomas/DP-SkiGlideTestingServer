@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-let Ski = new mongoose.Schema({
+let SkiRide = new mongoose.Schema({
 
     name: {
         type: String,
@@ -10,7 +10,15 @@ let Ski = new mongoose.Schema({
         type: String,
         required: true
     },
-    description: {       
+    skiID: {
+        type: String,
+        required: true
+    },
+    result: {
+        type: Number,
+        require: true,
+    },
+    note: {
         type: String,
         require: false,
     },
@@ -21,4 +29,4 @@ let Ski = new mongoose.Schema({
 
 });
 
-module.exports = mongoose.model('Ski', Ski);
+module.exports = mongoose.model('SkiRide', SkiRide);
