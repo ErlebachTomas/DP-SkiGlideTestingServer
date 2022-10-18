@@ -23,16 +23,13 @@ exports.insertTestSession = async function (req, res)  {
     const { testSession } = req.body.testSession;
    
     let test = new TestSession({testSession});
-
-    
+        
     try {
         let r = await test.save();
         res.json({ saved: r })
     } catch (err) {
         res.status(500).json(err);
     }
-
-
 
 };
 

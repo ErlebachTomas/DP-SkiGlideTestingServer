@@ -8,7 +8,7 @@
     "test": "jest --verbose ./test --detectOpenHandles --runInBand --forceExit --setupFiles dotenv/config"
   },
   "jest": {
-    "collectCoverage": true, 
+    "collectCoverage": true,
     "reporters": [
       "default",
       [
@@ -39,7 +39,8 @@
     "morgan": "^1.10.0",
     "pug": "^2.0.4",
     "serve-favicon": "^2.5.0",
-    "supertest": "^6.2.4"
+    "supertest": "^6.2.4",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "jest-html-reporter": "^3.7.0"

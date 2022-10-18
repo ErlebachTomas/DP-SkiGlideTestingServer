@@ -74,7 +74,7 @@ async function configureClient() {
  * Přihlášení uživatele */
 async function login() {
 
-    console.log("start login...")
+    //console.log("start login...")
     try {
 
         const options = {
@@ -150,7 +150,7 @@ async function callApi(path) {
     // undone throw err a osetřit v UI
     try {
         const token = await auth0.getTokenSilently();
-        console.log(token);
+        //console.log(token);
         let response = await fetch(path, {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -220,12 +220,13 @@ function processFile() {
 
 
     switch (chectFileType(file.name)) {
-        case "csv":
-            $("#preview").html("zatím nepodporováno");
-            break;
-        default:
+        case "xlsx":
             XLSXToJson(file);
             $("#btn-post").prop("disabled", false);
+        default:
+            $("#preview").html("zatím nepodporováno");
+            break;
+           
     }
 
 }

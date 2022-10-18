@@ -7,9 +7,11 @@ afterAll(async () => { mongoose.connection.close(); }); //ukonèit db spojení po 
 */
 describe('Environment variables', function () {
     test("vars are set and exist", async () => {
-        expect(process.env.Auth_domain).toBeNonEmptyString()
-        expect(process.env.Auth_clientId).toBeNonEmptyString()
-        expect(API_IDENTIFIER).toBeNonEmptyString()
+        expect(Boolean(process.env.Auth_domain)).toEqual(true)
+        expect(Boolean(process.env.Auth_clientId)).toEqual(true)
+        expect(Boolean(process.env.API_IDENTIFIER)).toEqual(true)
+       
+
     });
 });
 
