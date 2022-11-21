@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 let SkiRide = new mongoose.Schema({
 
-    name: {
+    id: {
         type: String,
         required: true
     },

@@ -85,6 +85,6 @@ exports.addSkiIfNotExist = async function (userID, ski) {
  * @throws {Exception} err
  * */
 exports.deleteSki = async function (userID, skiName) {
-    return await Ski.findOneAndRemove({ ownerUserID: userID, name: skiName });
+    return await Ski.findOneAndRemove({ name: skiName, ownerUserID: userID });
     
 }

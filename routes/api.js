@@ -14,7 +14,10 @@ const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
 
 const User = require('../model/User');
 const Ski = require('../model/Ski');
-const { use } = require('./index');
+const TestSession = require('../model/testSession');
+const SkiRide = require('../model/SkiRide');
+
+const { v4: uuidv4 } = require('uuid');
 
 
 // Authorization middleware. When used, the Access Token must
@@ -54,7 +57,7 @@ router.get('/getAllUsersSki', checkJwt, skiController.getAllUsersSki);
 router.get('/data', async function (req, res) {   
   
     //res.json({ data: 'test' });
-
+    /*
     let userID = "123";
     let ski = {
         name: "lyze1",
@@ -64,6 +67,7 @@ router.get('/data', async function (req, res) {
     }
 
     debug(await skiController.deleteSki(userID, ski.name));
+    */
 
     res.json({ data: middleware.currentTimeString() }); //test data
 
@@ -74,11 +78,67 @@ router.post('/addTestSession', checkJwt, testSessionController.insertTestSession
 /**
  Hromadný import dat
  * */
-router.post('/uploadData', checkJwt, function (req, res) {
+router.post('/uploadData', checkJwt, async function (req, res) {
 
+    //todo try + validace vstupů 
 
+    let userID = req.body.user.sub;
+      
+    userController.addIfNotExist(req.body.user);
 
-        res.json(req); //DO controller
+    const testID = uuidv4();
+    let test = {
+        id: testID, 
+        datatime: req.body.datetime,
+        ownerUserID: userID, 
+        airTemperature: req.body.airTemperature,
+        snowTemperature: req.body.snowTemperature,
+        snowType: req.body.snowType,
+        testType: req.body.testType,
+        note: req.body.note,
+        updated_at: middleware.currentTimeString()
+    }
+      
+    let testSession = new TestSession(test);
+    testSession.save();
+
+    let rides = JSON.parse(req.body.skiRide);
+
+    const skiNamesSet = new Set()
+
+    rides.forEach(async function (arrayItem) {
+
+        skiNamesSet.add(arrayItem.Ski);
+
+        const skiRide = {
+            id: uuidv4(),
+            testSessionID: testID,
+            skiID: arrayItem.Ski,
+            result: arrayItem.Val,            
+            updated_at: middleware.currentTimeString()
+        }
+
+        let r = new SkiRide(skiRide);
+        r.save();
+        
+    });
+
+    skiNamesSet.forEach(async function (item) {
+
+        let result = await skiController.loadSki(userID, item);
+
+        if (Object.keys(result).length == 0) {
+            let ski = {
+                name: item,
+                ownerUserID: userID,
+                description: "",
+                updated_at: middleware.currentTimeString()
+            }
+            await new Ski(ski).save();
+        } 
+
+    })         
+    res.json({ data: middleware.currentTimeString() }); 
 
 });
 

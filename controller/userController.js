@@ -36,10 +36,48 @@ exports.getUser = async function (req, res) {
 
 }
 /**
- * Aktualizuje uživatele v db 
- * @param User auktualizované parametry, id musí být stejné  
+ * Načte uživatele z dababáze
+ * @param String user_id
  */
-exports.updateUser =  async function(user) {
+exports.loadUserByID = async function (id) {
+
+    return await User.find({ user_id: id });
+}
+/**
+ * 
+ * Pokud neexistuje vloží * 
+ * @param {Json object} email, name, sub = id 
+ * @returns {User}
+ * @throws {Exception} err
+ */
+exports.addIfNotExist = async function (userJson) {
+
+    let result = await this.loadUserByID(userJson.sub); 
+    if (Object.keys(result).length > 0) {
+        debug(userJson.name + " již existuje, nepřidávám");
+        return result[0];
+    } else {      
+        const user = {
+            user_id: userJson.sub,
+            email: userJson.email,
+            name: userJson.name,
+            updated_at: userJson.updated_at
+        }        
+        return await new User(user).save();
+    } 
+
+}
+// todo funkce, ověření a update 
+
+
+/* === ? ==== */
+
+
+ /**
+ * Aktualizuje uživatele v db
+ * @param User auktualizované parametry, id musí být stejné
+ */
+exports.updateUser = async function (user) {
 
     return user.updateOne(
         { user_id: user.user_id },
@@ -71,11 +109,5 @@ exports.insertUser = async function (user) {
     debug(user.user_id + " inserted!")
     return user.save();
 }
-/**
- * Načte uživatele z dababáze
- * @param String user_id
- */
-exports.loadUserByID = async function (id) {
-
-    return await User.find({ user_id: id });
-}
+ 
+ 

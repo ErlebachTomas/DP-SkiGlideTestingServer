@@ -27,6 +27,10 @@ let TestSession = new mongoose.Schema({
         type: Number,
         required: true
     },
+    testType: {
+        type: Number,
+        required: true
+    },
     humidity: {
         type: Number,
         required: false

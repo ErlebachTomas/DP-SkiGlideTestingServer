@@ -256,7 +256,7 @@ async function postDataToServer(url,data) {
             body: JSON.stringify(data)
         }).then(res => {
             console.log("Complete! response:", res);
-            $("#preview").html(res);
+           // $("#preview").html(res);
         });
 
 
@@ -278,7 +278,7 @@ async function upload() {
         note: $("#note").val(),
         datetime: $("#date").val()
     };
-    
+    console.log(data);
     postDataToServer("/api/uploadData", data)
     
 } 
