@@ -1,8 +1,8 @@
-const Ski = require('../model/Ski');
+﻿const Ski = require('../model/Ski');
 const debug = require('debug')('myApp');
 
 /**
- * Vr�t� v�echny ly�e dan�ho u�ivatele 
+ * Vrátí všechny lyže daného uživatele 
  * @param {any} req
  * @param {any} res
  */
@@ -31,13 +31,15 @@ exports.getSki = async function (req, res) {
     }
 }
 
-// TODO test funkc�
+/**
+ * Vloží lyži z body 
+ * */
 exports.insertSki = async function (req, res) {
 
-    const { Ski } = req.body.ski;
+    const { skijson } = req.body.ski;
 
     try {
-        let ski = addSki(Ski)
+        let ski = await new Ski(skijson).save();
         res.json(ski);
 
     } catch (err) {
@@ -45,26 +47,44 @@ exports.insertSki = async function (req, res) {
     }
 }
 
-
-exports.addSki = async function (ski) { 
-    let newSki = new Ski({ ski });
-    return await newSki.save();           
-}
-
-
-/** na�te z db konkr�tn� ly�i u�ivatele */
+/** načte z db konkrétní lyži uživatele
+ * @param {String} userID
+ * @param {String} SkiName
+ * @returns Ski  
+ * @throws Exception
+ * */
 exports.loadSki = async function (userID, skiName) {
     return await Ski.find({ ownerUserID: userID, name: skiName  });
 }
 
 /**
- * Pokud neexistuje vlo�� nov�
- * @param String userID
- * @param Ski Ski
+ * 
+ * Pokud neexistuje vloží nový
+ * @param {String} userID
+ * @param {Json object} Ski
+ * @returns {Ski} vložená nebo existující lyže
+ * @throws {Exception} err
  */
-exports.addSki = async function (userID, Ski) {
-    
-    console.log("...")
+exports.addSkiIfNotExist = async function (userID, ski) {
+          
+    let result = await this.loadSki(userID, ski.name);
+
+    if (Object.keys(result).length > 0) {
+        debug(ski.name + " již existuje, nepřidávám");
+        return result;
+    } else {
+        return await new Ski(ski).save();
+    } 
+   
 }
-
-
+/**
+ * Vymaže záznam lyže z db
+ * @param {String} userID
+ * @param {String} SkiName
+ * @returns {Ski} vymazaná lyže
+ * @throws {Exception} err
+ * */
+exports.deleteSki = async function (userID, skiName) {
+    return await Ski.findOneAndRemove({ ownerUserID: userID, name: skiName });
+    
+}

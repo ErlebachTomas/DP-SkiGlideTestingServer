@@ -6,7 +6,7 @@ let SkiRide = new mongoose.Schema({
         type: String,
         required: true
     },
-    ownerUserID: {
+    testSessionID: {
         type: String,
         required: true
     },

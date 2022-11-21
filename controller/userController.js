@@ -1,4 +1,5 @@
 ﻿const User = require('../model/User');
+const debug = require('debug')('myApp');
 
 /**
  * Vrátí seznam všech uživatelů 
@@ -40,7 +41,7 @@ exports.getUser = async function (req, res) {
  */
 exports.updateUser =  async function(user) {
 
-    return User.updateOne(
+    return user.updateOne(
         { user_id: user.user_id },
         { $set: { user } }
     ), function (err, obj) {
@@ -54,9 +55,9 @@ Smaže uživatele z db
  */
 exports.deleteUser = async function (user) {
 
-    var query = { user_id: user.user_id };
+    var query = { user_id: user.user_id }; //do přepsat na id? 
 
-    User.deleteOne(query, function (err, obj) {
+    user.deleteOne(query, function (err, obj) {
         if (err) throw err;
         debug(user.user_id + " delete!")
         return true;
@@ -67,12 +68,8 @@ exports.deleteUser = async function (user) {
  * @param User user
  */
 exports.insertUser = async function (user) {
-
-    return User.insertOne({ user }, function (err, res) {
-        if (err) throw err;
-        debug(user.user_id + " inserted!")
-    });
-
+    debug(user.user_id + " inserted!")
+    return user.save();
 }
 /**
  * Načte uživatele z dababáze

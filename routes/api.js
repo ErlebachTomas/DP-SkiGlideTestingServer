@@ -12,6 +12,11 @@ const testSessionController = require('../controller/testSessionController');
 /* auth */
 const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
 
+const User = require('../model/User');
+const Ski = require('../model/Ski');
+const { use } = require('./index');
+
+
 // Authorization middleware. When used, the Access Token must
 // exist and be verified against the Auth0 JSON Web Key Set.
 const checkJwt = auth({
@@ -46,9 +51,22 @@ router.get('/getAllUsersSki', checkJwt, skiController.getAllUsersSki);
 
 
 /* undone remove test */
-router.get('/data', function (req, res) {   
-   //... test
-    res.json({ data: 'test' });
+router.get('/data', async function (req, res) {   
+  
+    //res.json({ data: 'test' });
+
+    let userID = "123";
+    let ski = {
+        name: "lyze1",
+        ownerUserID: userID,
+        description: "testovaci lyže",
+        updated_at: middleware.currentTimeString
+    }
+
+    skiController.addSkiIfNotExist(userID, ski);
+
+    res.json({ data: middleware.currentTimeString() }); //test data
+
 });
 
 router.post('/addTestSession', checkJwt, testSessionController.insertTestSession)
@@ -57,6 +75,8 @@ router.post('/addTestSession', checkJwt, testSessionController.insertTestSession
  Hromadný import dat
  * */
 router.post('/uploadData', checkJwt, function (req, res) {
+
+
 
         res.json(req); //DO controller
 

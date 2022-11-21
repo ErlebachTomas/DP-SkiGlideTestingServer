@@ -77,6 +77,8 @@ app.use(function (err, req, res, next) {
 app.set('port', process.env.PORT || 3000);
 
 var server = app.listen(app.get('port'), function () {
-    debug('Express server listening on port ' + server.address().port);
-    debug('DB:' + mongoDBUrl);
+
+    console.log('server listening on port ' + server.address().port);
+    debug('server listening on port ' + server.address().port);
+
 });

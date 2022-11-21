@@ -273,6 +273,7 @@ async function upload() {
         airTemperature: $("#airTemperature").val(),
         snowTemperature: $("#snowTemperature").val(),
         snowType: $("#snowType").find(":selected").val(),
+        testType: $("#testType").find(":selected").val(),
         skiRide: $("#preview").html(),
         note: $("#note").val(),
         datetime: $("#date").val()
