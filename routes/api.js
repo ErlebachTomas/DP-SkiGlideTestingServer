@@ -63,7 +63,7 @@ router.get('/data', async function (req, res) {
         updated_at: middleware.currentTimeString
     }
 
-    skiController.addSkiIfNotExist(userID, ski);
+    debug(await skiController.deleteSki(userID, ski.name));
 
     res.json({ data: middleware.currentTimeString() }); //test data
 

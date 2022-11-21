@@ -39,16 +39,16 @@ describe('SkiController', function () {
         test("Add and remove", async () => {           
 
             // přidá záznam
-            let r = await skiController.addSkiIfNotExist(userID, ski);
+            let r = await skiController.addSkiIfNotExist(userID, ski);          
             expect(ski.name).toEqual(r.name);
             // přidá stejný záznam znovu
             let addTheSame = await skiController.addSkiIfNotExist(userID, ski);
             expect(addTheSame.name).toEqual(r.name);
             // kontrola, že se vložil jednou
-            let load = await skiController.loadSki(userID, ski.name);
-            expect(load.lengh).toEqual(1);
+            let loadedSki = await skiController.loadSki(userID, ski.name);
+            expect(Object.keys(loadedSki).length).toEqual(1);
              //vymaže záznam
-            let r2 = await skiController.deleteSki(userID, ski);
+            let r2 = await skiController.deleteSki(userID, ski.name);
             expect(ski.name).toEqual(r2.name);            
         });
     });

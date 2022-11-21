@@ -68,10 +68,10 @@ exports.loadSki = async function (userID, skiName) {
 exports.addSkiIfNotExist = async function (userID, ski) {
           
     let result = await this.loadSki(userID, ski.name);
-
+    
     if (Object.keys(result).length > 0) {
         debug(ski.name + " již existuje, nepřidávám");
-        return result;
+        return result[0];
     } else {
         return await new Ski(ski).save();
     } 
