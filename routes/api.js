@@ -133,11 +133,12 @@ router.post('/uploadData', checkJwt, async function (req, res) {
                 ownerUserID: userID,
                 description: "",
                 updated_at: middleware.currentTimeString()
-            }
+            }            
             await new Ski(ski).save();
         } 
 
-    })         
+    })
+    
     res.json({ data: middleware.currentTimeString() }); 
 
 });
