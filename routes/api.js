@@ -14,7 +14,7 @@ const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
 
 const User = require('../model/User');
 const Ski = require('../model/Ski');
-const TestSession = require('../model/testSession');
+const TestSession = require('../model/TestSession');
 const SkiRide = require('../model/SkiRide');
 
 const { v4: uuidv4 } = require('uuid');

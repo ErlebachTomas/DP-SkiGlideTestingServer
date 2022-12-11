@@ -1,6 +1,6 @@
 const Ski = require('../model/Ski');
 const User = require('../model/User');
-const TestSession = require('../model/testSession');
+const TestSession = require('../model/TestSession');
 
 const debug = require('debug')('myApp');
 

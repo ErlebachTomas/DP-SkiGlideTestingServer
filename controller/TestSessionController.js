@@ -1,4 +1,4 @@
-const TestSession = require('../model/testSession');
+const TestSession = require('../model/TestSession');
 const debug = require('debug')('myApp');
 
 
