@@ -12,8 +12,8 @@ var bodyParser = require('body-parser');
 
 // dbs 
 const mongoose = require('mongoose');
-
-let mongoDBUrl = process.env.DB_CONNECTION;
+let mongoDBUrl = process.env.local == "true" ? process.env.DB_CONNECTION_LOCAL : process.env.DB_CONNECTION 
+debug(mongoDBUrl)
 mongoose.connect(mongoDBUrl);
 mongoose.Promise = global.Promise;
 

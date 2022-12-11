@@ -9,7 +9,7 @@ Create .env file for config vars
 | `env` | type `development` for print full error stacktrace   |
 | `DEBUG` | debug tag for console e.g. `myApp` |
 | `DB_CONNECTION` | connection string for Mongoose |
-| `PORT` | Port for web app e.g.`1337`, default value `3000` |
+| `PORT` | Port for web app e.g.`2022`, default value `3000` |
 | `Auth_domain` | [Auth0 domain](https://manage.auth0.com/dashboard) e.g. `xxx.us.auth0.com`|
 | `Auth_clientId`| [Auth0 web client ID](https://manage.auth0.com/dashboard) |
 | `API_IDENTIFIER` | Custom API Identifier, usually url |
@@ -58,16 +58,15 @@ or restart: `sudo systemctl restart vsftpd.service`
 4.1  Create a user: `sudo adduser <username>`
 4.2. Set password `sudo passwd <password>` 
 NOTE: check if the user has write rights to the `/var/www` folder
-4.3. Connect: `ftp <ip-address or domain name>`
-4.4 Escape from ftp by `quit` command
+4.3.(Optional) Connect: `ftp <ip-address or domain name>`
+4.4 (Optional) Escape from ftp by `quit` command
 4.5 Now you can use the [FTP client](https://filezilla-project.org/) for uploading files
 5. **Install Node.js**
 5.1 install the latest available package `sudo apt-get install nodejs`
 5.2 test if it worked using `node -v` 
 5.3 install npm `sudo apt-get install npm`
 5.4 test it `npm -v`
-6. **Install database**
-...
+6. **[Create and setup MongoDB database](https://www.mongodb.com/atlas/database)**
 7. **Deploy App**
 7.1 upload files from the repository to `/var/www` using ftp
 7.2 install all modules listed as dependencies in package.json using command `npm install `
@@ -76,8 +75,14 @@ NOTE: check if the user has write rights to the `/var/www` folder
 8. **Set up a production environment**
 8.1 install PM2 a process manager for Node.js applications: `sudo npm install pm2@latest -g`
 8.2 run application in the background:`pm2 start <file>` e.g. `pm2 start app.js`
-PM2 can automatically restart application when a file is modified `pm2 start app.js --watch`
-8.3 (Optional cammand) list the applications currently managed by PM2: `pm2 list`, monitor CPU and memory usage: `pm2 monit`, stop app using: `pm2 stop <app_name_or_id>`,    restart an application: `pm2 restart <app_name_or_id>` 
+Usefull command: 
+    - PM2 can automatically restart application when a file is modified `pm2 start app.js --watch`
+    - list the applications currently managed by PM2: `pm2 list`,
+    - monitor CPU and memory usage: `pm2 monit`, 
+    - stop app using: `pm2 stop <app_name_or_id>`,   
+    - restart an application: `pm2 restart <app_name_or_id>`,
+    - delete:  `pm2 delete <app_name_or_id>` 
+    - rename process: `pm2 restart <id> --name <newName>` 
 
 <!---{::comment}
 8.4 Set PM2 to start on boot: `pm2 startup systemd`
