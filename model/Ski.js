@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 let Ski = new mongoose.Schema({
 
+    id: {
+        type: Number,
+        required: false
+    },
     name: {
         type: String,
         required: true

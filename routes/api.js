@@ -43,14 +43,59 @@ router.post('/checkUpdate', middleware.checkUpdate);
 
 /* UŽIVATELE */
 /** vrátí seznam všech registrovaných uživatelů */
-router.get('/getAllUsers', userController.getAllUsers);
+router.get('/getAllUsers', checkJwt, userController.getAllUsers);
 router.get('/getUser', checkJwt, userController.getUser);
 
 
 
+/* Lyže */
+router.get('/getAllUsersSki', checkJwt, skiController.getAllUsersSki); 
 
-router.get('/getAllUsersSki', checkJwt, skiController.getAllUsersSki);
+router.post('/addSki', checkJwt, skiController.insertSki);
 
+router.post('/deleteSki', checkJwt, async function (req, res) {
+
+    try {
+        await skiController.deleteSki(req.body.userID, req.body.ski.name)
+    } catch (err) {
+        debug(err)
+        res.status(500).json(err);
+    }
+});
+
+router.post('/updateSki', checkJwt, async function (req, res) {
+
+    try {
+        /* update https://www.mongodb.com/docs/drivers/node/current/usage-examples/updateOne/ */    
+        
+        const filter = { "id": req.body.ski.id, "ownerUserID": req.body.userID };
+        const options = { upsert: true };
+
+        let updateDoc = req.body.ski
+        updateDoc["ownerUserID"] = req.body.userID;  
+
+        const result = await Ski.updateOne(filter, updateDoc, options);
+        debug(
+            `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`,
+        );
+
+    } catch (err) {
+        debug(err)
+        res.status(500).json(err);
+    }
+
+});
+
+router.get('/deleteAllUsersSkis', checkJwt, async function (req, res) {
+    try {
+        debug("mažu " + req.query.user)
+
+        await Ski.deleteMany({ "ownerUserID": req.query.user }); 
+    } catch (err) {
+        debug(err)
+        res.status(500).json(err);
+    }   
+});
 
 
 /* undone remove test */
@@ -72,6 +117,19 @@ router.get('/data', async function (req, res) {
     res.json({ data: middleware.currentTimeString() }); //test data
 
 });
+
+/* undone remove test  
+ */
+router.post('/post-test', checkJwt, function (req, res) {
+
+    debug(req.body.data);
+
+    res.json({
+        data: 'úspěch ' + req.body.data, 
+        
+    });
+});
+
 
 router.post('/addTestSession', checkJwt, testSessionController.insertTestSession)
 
@@ -144,11 +202,18 @@ router.post('/uploadData', checkJwt, async function (req, res) {
 });
 
 
-
 // This route needs authentication
 router.get('/private', checkJwt, function (req, res) {
-    res.json({
-        message: 'Hello from a private endpoint!'
+     
+    console.log(req.method + ' ' + req.url + ' HTTP/' + req.httpVersion);
+    for (var property in req.headers) {
+        if (req.headers.hasOwnProperty(property)) {
+            console.log(property + ': ' + req.headers[property])
+        }
+    }
+    res.json({        
+        message: 'Hello from a private endpoint!',
+        token: req.header('authorization')
     });
 });
 

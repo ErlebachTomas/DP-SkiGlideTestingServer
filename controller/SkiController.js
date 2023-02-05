@@ -11,7 +11,7 @@ exports.getAllUsersSki = async function (req, res) {
     debug("nacitam data pro " + req.query.user)
 
     try {
-        let data = await Ski.find({ ownerUserID: req.user });
+        let data = await Ski.find({ ownerUserID: req.query.user });
         res.json(data);
 
     } catch (err) {
@@ -32,17 +32,22 @@ exports.getSki = async function (req, res) {
 }
 
 /**
- * Vloží lyži z body 
+ * Vloží lyži z body
  * */
 exports.insertSki = async function (req, res) {
+       
+    try {       
+        let json = req.body.ski
+        json["ownerUserID"] = req.body.userID; 
+        debug("/addSki" + json)
+       
 
-    const { skijson } = req.body.ski;
-
-    try {
-        let ski = await new Ski(skijson).save();
+        let ski = await new Ski( json ).save();       
         res.json(ski);
 
+
     } catch (err) {
+        debug(err)
         res.status(500).json(err);
     }
 }
