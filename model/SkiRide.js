@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 let SkiRide = new mongoose.Schema({
 
-    id: {
+    UUID: {
         type: String,
         required: true
     },
@@ -22,6 +22,10 @@ let SkiRide = new mongoose.Schema({
         type: String,
         require: false,
     },
+    status: {
+        type: String,
+        require: false,
+     },
     updated_at: {
         type: String,
         require: false,

@@ -39,6 +39,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes); //web client
 app.use('/api', api); //REST api
 
+const swaggerUi = require('swagger-ui-express')
+const swaggerFile = require('./docAPI.json')
+/**
+ * Dokumentace api
+ */
+app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
@@ -75,9 +83,11 @@ app.use(function (err, req, res, next) {
 });
 app.set('port', process.env.PORT || 3000);
 
+
 var server = app.listen(app.get('port'), function () {
 
-    console.log('server listening on port ' + server.address().port);
+    console.log('server listening on port ' + server.address().port);   
+
     debug('server listening on port ' + server.address().port);
 
 });

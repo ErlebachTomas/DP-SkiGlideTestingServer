@@ -61,8 +61,8 @@ or restart: `sudo systemctl restart vsftpd.service`
 4. **Create an FTP user and connect** 
 4.1  Create a user: `sudo adduser <username>`
 4.2. Set password `sudo passwd <password>` 
-NOTE: check if the user has write rights to the `/var/www` folder 
-if not run: `sudo chown -R <username>:root /var/www`
+*NOTE: check if the user has write rights to the `/var/www` folder 
+if not run: `sudo chown -R <username>:root /var/www`*
 4.3.(Optional) Connect: `ftp <ip-address or domain name>`
 4.4 (Optional) Escape from ftp by `quit` command
 4.5 Now you can use the [FTP client](https://filezilla-project.org/) for uploading files
@@ -71,9 +71,9 @@ if not run: `sudo chown -R <username>:root /var/www`
 5.2 test if it worked using `node -v` 
 5.3 install npm `sudo apt-get install npm`
 5.4 test it `npm -v`
-NOTE: for specific version node.js install curl
-`sudo snap install curl` and `curl -sL https://deb.nodesource.com/setup_<version e.g 16>.x | sudo -E bash -sudo apt-get install -y nodejs` or for current version:
-`curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -sudo apt-get install -y nodejs` 
+*NOTE: [for specific version node.js install](https://github.com/nodesource/distributions/blob/master/README.md) curl*
+`sudo snap install curl` *and for version 16:* `curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - \&& sudo apt-get install -y nodejs`
+*You can uninstall node using:* `sudo apt purge nodejs npm`
 6. **[Create and setup MongoDB database](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/)**
  *Note: alternatively you can use [Atlas cloud database](https://www.mongodb.com/atlas/database)*
 6.1. Import the public key: `wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -` 

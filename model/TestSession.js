@@ -2,12 +2,11 @@
 
 let TestSession = new mongoose.Schema({
 
-    id: {
+    UUID: {
         type: String,
         required: true
-    },
-    //todo datatime
-    datatime: {
+    },  
+    datetime: {
         type: String,
         required: true,
     },    
@@ -39,6 +38,10 @@ let TestSession = new mongoose.Schema({
         type: String,
         required: false
     },
+    status: {
+        type: String,
+        required: false
+     },
     updated_at: {
         type: String,
         require: false,

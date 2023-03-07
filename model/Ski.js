@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 
 let Ski = new mongoose.Schema({
 
-    id: {
-        type: Number,
-        required: false
+    UUID: {
+        type: String,
+        required: true
     },
     name: {
         type: String,
@@ -15,6 +15,10 @@ let Ski = new mongoose.Schema({
         required: true
     },
     description: {       
+        type: String,
+        require: false,
+    },
+    status: {
         type: String,
         require: false,
     },

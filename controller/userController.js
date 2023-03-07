@@ -22,13 +22,25 @@ exports.getAllUsers = async function (req, res) {
  * @param {any} res
  */
 exports.getUser = async function (req, res) {
-
-    let id = req.body.user_id 
-
+   
     try {
-        let user = loadUserByID(user_id);
+        let user = loadUserByID(req.body.user_id);
 
-        res.json(user);
+        /* 
+        #swagger.tags = ['User']
+        #swagger.summary = vrátí objekt uživatele
+        #swagger.description = obsahuje všechna data o uživateli
+        #swagger.responses[200] = {
+              description: 'Uživatelská data',
+              schema: { $ref: '#/definitions/User' }
+        #swagger.security = [{
+                "apiKeyAuth": []
+            }] 
+       } */
+
+        res.status(200).json(user);
+
+       
 
     } catch (err) {
         res.status(500).json(err);

@@ -8,6 +8,7 @@ const middleware = require('../controller/middleware');
 const userController = require('../controller/userController');
 const skiController = require('../controller/skiController');
 const testSessionController = require('../controller/testSessionController');
+const skiRideController = require('../controller/skiRideController');
 
 /* auth */
 const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
@@ -16,6 +17,8 @@ const User = require('../model/User');
 const Ski = require('../model/Ski');
 const TestSession = require('../model/TestSession');
 const SkiRide = require('../model/SkiRide');
+
+
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -39,10 +42,16 @@ router.post('/', function (req, res) {
     res.send( req.body);
 });
 
+/** verze api */
+router.get('/version', function (req, res) {
+    res.json({version:0.1, info: "Je dostupná nová verze aplikace"});
+});
+
+
 router.post('/checkUpdate', middleware.checkUpdate);
 
 /* UŽIVATELE */
-/** vrátí seznam všech registrovaných uživatelů */
+/**  vrátí seznam všech registrovaných uživatelů */
 router.get('/getAllUsers', checkJwt, userController.getAllUsers);
 router.get('/getUser', checkJwt, userController.getUser);
 
@@ -56,7 +65,10 @@ router.post('/addSki', checkJwt, skiController.insertSki);
 router.post('/deleteSki', checkJwt, async function (req, res) {
 
     try {
-        await skiController.deleteSki(req.body.userID, req.body.ski.name)
+        await skiController.deleteSki(req.body.userID, req.body.ski.UUID);
+
+        res.sendStatus(200);
+
     } catch (err) {
         debug(err)
         res.status(500).json(err);
@@ -68,16 +80,18 @@ router.post('/updateSki', checkJwt, async function (req, res) {
     try {
         /* update https://www.mongodb.com/docs/drivers/node/current/usage-examples/updateOne/ */    
         
-        const filter = { "id": req.body.ski.id, "ownerUserID": req.body.userID };
+        const filter = { "UUID": req.body.ski.UUID, "ownerUserID": req.body.userID };
         const options = { upsert: true };
 
-        let updateDoc = req.body.ski
+        let updateDoc = req.body.ski;
         updateDoc["ownerUserID"] = req.body.userID;  
 
         const result = await Ski.updateOne(filter, updateDoc, options);
         debug(
             `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`,
         );
+
+        res.sendStatus(200);
 
     } catch (err) {
         debug(err)
@@ -88,9 +102,11 @@ router.post('/updateSki', checkJwt, async function (req, res) {
 
 router.get('/deleteAllUsersSkis', checkJwt, async function (req, res) {
     try {
-        debug("mažu " + req.query.user)
+        debug("mažu " + req.query.user);
 
         await Ski.deleteMany({ "ownerUserID": req.query.user }); 
+        res.sendStatus(200);
+
     } catch (err) {
         debug(err)
         res.status(500).json(err);
@@ -98,9 +114,45 @@ router.get('/deleteAllUsersSkis', checkJwt, async function (req, res) {
 });
 
 
+router.post('/syncSki', checkJwt, async function (req, res) {
+    try {
+        debug("sync" + req.body.ski.name);
+
+        let json = req.body.ski
+        json["ownerUserID"] = req.body.userID; 
+
+        skiController.addSkiIfNotExist(req.body.userID, json);
+        res.sendStatus(200);
+    } catch (err) {
+        debug(err);
+        res.status(500).json(err);
+    }   
+
+});
+
+/* ============ TESTY =================  */
+//todo token
+router.get('/getAllUserTests', testSessionController.getAllUserTests)
+
+router.post('/addTestSession', checkJwt, middleware.processDataBody, testSessionController.insertTestSession)
+router.post('/updateTestSession', checkJwt, middleware.processDataBody, testSessionController.updateTestSession)
+router.post('/deleteTestSession', checkJwt, middleware.processDataBody, testSessionController.deleteTestSession)
+router.post('/syncTestSession', checkJwt, middleware.processDataBody, testSessionController.syncTestSession)
+
+/* jizdy */
+
+router.get('/getAllSkiRide', skiRideController.getAllSkiRides)
+
+router.post('/addSkiRide', checkJwt, middleware.processDataBody, skiRideController.insertSkiRide)
+router.post('/updateSkiRide', checkJwt, middleware.processDataBody, skiRideController.updateSkiRide)
+router.post('/deleteSkiRide', checkJwt, middleware.processDataBody, skiRideController.deleteSkiRide)
+router.post('/syncSkiRide', checkJwt, middleware.processDataBody, skiRideController.syncSkiRide)
+
+
+
 /* undone remove test */
-router.get('/data', async function (req, res) {   
-  
+router.get('/data', async function (req, res) {
+
     //res.json({ data: 'test' });
     /*
     let userID = "123";
@@ -125,13 +177,10 @@ router.post('/post-test', checkJwt, function (req, res) {
     debug(req.body.data);
 
     res.json({
-        data: 'úspěch ' + req.body.data, 
-        
+        data: 'úspěch ' + req.body.data,
+
     });
 });
-
-
-router.post('/addTestSession', checkJwt, testSessionController.insertTestSession)
 
 /**
  Hromadný import dat

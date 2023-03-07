@@ -1,5 +1,7 @@
 ﻿const Ski = require('../model/Ski');
 const debug = require('debug')('myApp');
+const middleware = require('./middleware');
+
 
 /**
  * Vrátí všechny lyže daného uživatele 
@@ -19,7 +21,7 @@ exports.getAllUsersSki = async function (req, res) {
     }
 
 };
-
+/** Načte lyži z dbs */
 exports.getSki = async function (req, res) {
 
     try {
@@ -30,27 +32,19 @@ exports.getSki = async function (req, res) {
         res.status(500).json(err);
     }
 }
-
 /**
- * Vloží lyži z body
- * */
+ * Vloží lyži 
+ **/
 exports.insertSki = async function (req, res) {
-       
-    try {       
+
+    middleware.try(res, async function () {
         let json = req.body.ski
-        json["ownerUserID"] = req.body.userID; 
+        json["ownerUserID"] = req.body.userID;
         debug("/addSki" + json)
-       
-
-        let ski = await new Ski( json ).save();       
-        res.json(ski);
-
-
-    } catch (err) {
-        debug(err)
-        res.status(500).json(err);
-    }
+        await new Ski(json).save(); 
+    });
 }
+
 
 /** načte z db konkrétní lyži uživatele
  * @param {String} userID
