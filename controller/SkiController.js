@@ -79,11 +79,11 @@ exports.addSkiIfNotExist = async function (userID, ski) {
 /**
  * Vymaže záznam lyže z db
  * @param {String} userID
- * @param {String} SkiName
+ * @param {String} UUID
  * @returns {Ski} vymazaná lyže
  * @throws {Exception} err
  * */
-exports.deleteSki = async function (userID, skiName) {
-    return await Ski.findOneAndRemove({ name: skiName, ownerUserID: userID });
+exports.deleteSki = async function (userID, UUID) {
+    return await Ski.findOneAndRemove({ UUID: UUID, ownerUserID: userID });
     
 }
