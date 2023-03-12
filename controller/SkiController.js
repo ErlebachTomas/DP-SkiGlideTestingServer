@@ -1,8 +1,10 @@
-const Ski = require('../model/Ski');
+﻿const Ski = require('../model/Ski');
 const debug = require('debug')('myApp');
+const middleware = require('./middleware');
+
 
 /**
- * Vr�t� v�echny ly�e dan�ho u�ivatele 
+ * Vrátí všechny lyže daného uživatele 
  * @param {any} req
  * @param {any} res
  */
@@ -11,7 +13,7 @@ exports.getAllUsersSki = async function (req, res) {
     debug("nacitam data pro " + req.query.user)
 
     try {
-        let data = await Ski.find({ ownerUserID: req.user });
+        let data = await Ski.find({ ownerUserID: req.query.user });
         res.json(data);
 
     } catch (err) {
@@ -19,7 +21,7 @@ exports.getAllUsersSki = async function (req, res) {
     }
 
 };
-
+/** Načte lyži z dbs */
 exports.getSki = async function (req, res) {
 
     try {
@@ -30,41 +32,58 @@ exports.getSki = async function (req, res) {
         res.status(500).json(err);
     }
 }
-
-// TODO test funkc�
+/**
+ * Vloží lyži 
+ **/
 exports.insertSki = async function (req, res) {
 
-    const { Ski } = req.body.ski;
-
-    try {
-        let ski = addSki(Ski)
-        res.json(ski);
-
-    } catch (err) {
-        res.status(500).json(err);
-    }
+    middleware.try(res, async function () {
+        let json = req.body.ski
+        json["ownerUserID"] = req.body.userID;
+        debug("/addSki" + json)
+        await new Ski(json).save(); 
+    });
 }
 
 
-exports.addSki = async function (ski) { 
-    let newSki = new Ski({ ski });
-    return await newSki.save();           
-}
-
-
-/** na�te z db konkr�tn� ly�i u�ivatele */
+/** načte z db konkrétní lyži uživatele
+ * @param {String} userID
+ * @param {String} SkiName
+ * @returns Ski  
+ * @throws Exception
+ * */
 exports.loadSki = async function (userID, skiName) {
     return await Ski.find({ ownerUserID: userID, name: skiName  });
 }
 
 /**
- * Pokud neexistuje vlo�� nov�
- * @param String userID
- * @param Ski Ski
+ * 
+ * Pokud neexistuje vloží nový
+ * @param {String} userID
+ * @param {Json object} Ski
+ * @returns {Ski} vložená nebo existující lyže
+ * @throws {Exception} err
  */
-exports.addSki = async function (userID, Ski) {
+exports.addSkiIfNotExist = async function (userID, ski) {
+          
+    let result = await this.loadSki(userID, ski.name);
     
-    console.log("...")
+    if (Object.keys(result).length > 0) {
+        debug(ski.name + " již existuje, nepřidávám");
+        return result[0];
+    } else {
+        return await new Ski(ski).save();
+    } 
+   
 }
-
-
+/**
+ * Vymaže záznam lyže z db
+ * @param {String} userID
+ * @param {String} UUID
+ * @returns {Ski} vymazaná lyže
+ * @throws {Exception} err
+ * */
+exports.deleteSki = async function (userID, UUID) {
+    return await Ski.findOneAndRemove({ UUID: UUID, ownerUserID: userID });
+    
+}

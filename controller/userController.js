@@ -1,4 +1,5 @@
 ﻿const User = require('../model/User');
+const debug = require('debug')('myApp');
 
 /**
  * Vrátí seznam všech uživatelů 
@@ -21,13 +22,25 @@ exports.getAllUsers = async function (req, res) {
  * @param {any} res
  */
 exports.getUser = async function (req, res) {
-
-    let id = req.body.user_id 
-
+   
     try {
-        let user = loadUserByID(user_id);
+        let user = loadUserByID(req.body.user_id);
 
-        res.json(user);
+        /* 
+        #swagger.tags = ['User']
+        #swagger.summary = vrátí objekt uživatele
+        #swagger.description = obsahuje všechna data o uživateli
+        #swagger.responses[200] = {
+              description: 'Uživatelská data',
+              schema: { $ref: '#/definitions/User' }
+        #swagger.security = [{
+                "apiKeyAuth": []
+            }] 
+       } */
+
+        res.status(200).json(user);
+
+       
 
     } catch (err) {
         res.status(500).json(err);
@@ -35,12 +48,50 @@ exports.getUser = async function (req, res) {
 
 }
 /**
- * Aktualizuje uživatele v db 
- * @param User auktualizované parametry, id musí být stejné  
+ * Načte uživatele z dababáze
+ * @param String user_id
  */
-exports.updateUser =  async function(user) {
+exports.loadUserByID = async function (id) {
 
-    return User.updateOne(
+    return await User.find({ user_id: id });
+}
+/**
+ * 
+ * Pokud neexistuje vloží * 
+ * @param {Json object} email, name, sub = id 
+ * @returns {User}
+ * @throws {Exception} err
+ */
+exports.addIfNotExist = async function (userJson) {
+
+    let result = await this.loadUserByID(userJson.sub); 
+    if (Object.keys(result).length > 0) {
+        debug(userJson.name + " již existuje, nepřidávám");
+        return result[0];
+    } else {      
+        const user = {
+            user_id: userJson.sub,
+            email: userJson.email,
+            name: userJson.name,
+            updated_at: userJson.updated_at
+        }        
+        return await new User(user).save();
+    } 
+
+}
+// todo funkce, ověření a update 
+
+
+/* === ? ==== */
+
+
+ /**
+ * Aktualizuje uživatele v db
+ * @param User auktualizované parametry, id musí být stejné
+ */
+exports.updateUser = async function (user) {
+
+    return user.updateOne(
         { user_id: user.user_id },
         { $set: { user } }
     ), function (err, obj) {
@@ -54,9 +105,9 @@ Smaže uživatele z db
  */
 exports.deleteUser = async function (user) {
 
-    var query = { user_id: user.user_id };
+    var query = { user_id: user.user_id }; //do přepsat na id? 
 
-    User.deleteOne(query, function (err, obj) {
+    user.deleteOne(query, function (err, obj) {
         if (err) throw err;
         debug(user.user_id + " delete!")
         return true;
@@ -67,18 +118,8 @@ exports.deleteUser = async function (user) {
  * @param User user
  */
 exports.insertUser = async function (user) {
-
-    return User.insertOne({ user }, function (err, res) {
-        if (err) throw err;
-        debug(user.user_id + " inserted!")
-    });
-
+    debug(user.user_id + " inserted!")
+    return user.save();
 }
-/**
- * Načte uživatele z dababáze
- * @param String user_id
- */
-exports.loadUserByID = async function (id) {
-
-    return await User.find({ user_id: id });
-}
+ 
+ 

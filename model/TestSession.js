@@ -2,11 +2,14 @@
 
 let TestSession = new mongoose.Schema({
 
-    id: {
+    UUID: {
         type: String,
         required: true
-    },
-    //todo datatime
+    },  
+    datetime: {
+        type: String,
+        required: true,
+    },    
     ownerUserID: {
         type: String,
         required: true
@@ -19,8 +22,26 @@ let TestSession = new mongoose.Schema({
         type: Number,
         required: true
     },
-    humidity: Number,
-     
+    snowType: {
+        type: Number,
+        required: true
+    },
+    testType: {
+        type: Number,
+        required: true
+    },
+    humidity: {
+        type: Number,
+        required: false
+    },
+    note: {
+        type: String,
+        required: false
+    },
+    status: {
+        type: String,
+        required: false
+     },
     updated_at: {
         type: String,
         require: false,

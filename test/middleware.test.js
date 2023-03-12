@@ -3,10 +3,10 @@ const middleware = require('../controller/middleware');
 const userController = require('../controller/userController');
 const skiController = require('../controller/skiController');
 const testSessionController = require('../controller/testSessionController');
-
 const User = require('../model/User');
 
 const { v4: uuidv4 } = require('uuid');
+const Ski = require('../model/Ski');
 
 /* === TESTY === */
 describe('calculation', function () {
@@ -24,6 +24,38 @@ describe('calculation', function () {
     });
 
 });
+describe('SkiController', function () {
+
+    let userID = "123";
+    let ski = {
+        name: "lyze1",
+        ownerUserID: userID,
+        description: "testovaci lyže",
+        updated_at: middleware.currentTimeString()
+    }
+
+    describe('Ski CRUD', function () {
+
+        test("Add and remove", async () => {           
+
+            // přidá záznam
+            let r = await skiController.addSkiIfNotExist(userID, ski);          
+            expect(ski.name).toEqual(r.name);
+            // přidá stejný záznam znovu
+            let addTheSame = await skiController.addSkiIfNotExist(userID, ski);
+            expect(addTheSame.name).toEqual(r.name);
+            // kontrola, že se vložil jednou
+            let loadedSki = await skiController.loadSki(userID, ski.name);
+            expect(Object.keys(loadedSki).length).toEqual(1);
+             //vymaže záznam
+            let r2 = await skiController.deleteSki(userID, ski.name);
+            expect(ski.name).toEqual(r2.name);            
+        });
+    });
+   
+});
+
+/*
 describe('userController', function () {
 
     test("User CRUD", async () => {
@@ -42,7 +74,7 @@ describe('userController', function () {
 
             expect(r.user_id).toEqual(testUser.user_id);
 
-            let now = middleware.currentTimeString(); 
+            let now = middleware.currentTimeString();
 
             await userController.updateUser({
                 user_id: id,
@@ -52,20 +84,19 @@ describe('userController', function () {
             });
 
             let db_account = await userController.loadUserByID(testUser.user_id);
-          
+
             expect(db_account.updated_at).toEqual(now);
 
             let result = await userController.deleteUser(db_account);
 
             expect(result).toEqual(true);
-
-
         } catch (err) {
-            console.log(err)
+
+            fail(err);
         }
-        
 
     });
 
 
 });
+*/

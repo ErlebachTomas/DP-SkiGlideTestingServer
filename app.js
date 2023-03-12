@@ -12,8 +12,8 @@ var bodyParser = require('body-parser');
 
 // dbs 
 const mongoose = require('mongoose');
-
-let mongoDBUrl = process.env.DB_CONNECTION;
+let mongoDBUrl = process.env.local == "true" ? process.env.DB_CONNECTION_LOCAL : process.env.DB_CONNECTION 
+debug(mongoDBUrl)
 mongoose.connect(mongoDBUrl);
 mongoose.Promise = global.Promise;
 
@@ -38,6 +38,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes); //web client
 app.use('/api', api); //REST api
+
+const swaggerUi = require('swagger-ui-express')
+const swaggerFile = require('./docAPI.json')
+/**
+ * Dokumentace api
+ */
+app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -73,10 +81,13 @@ app.use(function (err, req, res, next) {
         error: {}
     });
 });
-
 app.set('port', process.env.PORT || 3000);
 
+
 var server = app.listen(app.get('port'), function () {
-    debug('Express server listening on port ' + server.address().port);
-    debug('DB:' + mongoDBUrl);
+
+    console.log('server listening on port ' + server.address().port);   
+
+    debug('server listening on port ' + server.address().port);
+
 });

@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node app",
     "dev": "nodemon app.js",
+    "doc": "node doc.js",
     "test": "jest --verbose ./test --detectOpenHandles --runInBand --forceExit --setupFiles dotenv/config"
   },
   "jest": {
@@ -40,6 +41,8 @@
     "pug": "^2.0.4",
     "serve-favicon": "^2.5.0",
     "supertest": "^6.2.4",
+    "swagger-autogen": "^2.23.1",
+    "swagger-ui-express": "^4.6.2",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

@@ -19,6 +19,7 @@ block content
         option(value='/api/private') GET private data (requere token)          
         option(value='/api/private-scoped') GET data (scope and authenticated)
         option(value='/api/getAllUsersSki') GET getAllUsersSki 
+        option(value='/api/getAllUsers') GET getAllUsers
       button#ApiCall.btn.btn-outline-primary.mt-2 Odeslat
       pre#ApiResponse.mt-2
 
@@ -44,11 +45,22 @@ block content
               option(selected='') Výběr
               option(value='1') Čerstvě napadaný prašan
               option(value='2') Hranatozrnitý sníh
-              option(value='3') Umělý sníh
-              option(value='4') Hruboznný sníh
-              option(value='5') Jemnozrnný sníh
-              option(value='6') Starý (transformovaný) sníh
-          // todo load from api    
+              option(value='3') Led (extrém)
+              option(value='4') Umělý sníh
+              option(value='5') Hruboznný sníh
+              option(value='6') Jemnozrnný sníh
+              option(value='7') Padající sníh
+              option(value='8') Špinavý sníh
+              option(value='9') Starý (transformovaný) sníh    
+          // todo load from api 
+        .input-group.mb-3
+          .input-group-prepend
+            label.input-group-text(for='testType') Typ testu:
+          select#testType.form-select
+              option(selected='') Výběr
+              option(value='1') Čas
+              option(value='2') Vzdálenost
+              option(value='3') Rychlost    
         .form-group.mb-3
           label.font-weight-bold(for='note') Čas
           .input-group.date            
