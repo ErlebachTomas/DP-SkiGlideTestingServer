@@ -14,23 +14,33 @@ afterAll(async () => {
 /* === TESTY === */
 describe('Test public API', function () {
 
-    test("seznam uživatelů", async () => {
+    test("aktuální verze", async () => {
 
-        const res = await request(app).get("/api/getAllUsers");
+        const res = await request(app).get("/api/version")
         expect(res.statusCode).toEqual(200);
         expect(res.body.length).toBeGreaterThan(0);
-        expect(res.body[0]).toHaveProperty("name");
-    });
-    /*
-    test("/getAllUsersSki", async () => {
-        const res = await request(app).get("/api/getAllUsersSki").set('Authorization', `Bearer ${token}`);
-        expect(res.statusCode).toEqual(200);       
-    });    
-    */
+        expect(res.body[0]).toHaveProperty("version");
+    });     
+   
 });
 
 /* Auth0 tests */
 describe('Auth0', function () {
+
+    /*
+   test("seznam uživatelů", async () => {
+
+       const res = await request(app).get("/api/getAllUsers").set('Authorization', `Bearer ${token}`);;
+       expect(res.statusCode).toEqual(200);
+       expect(res.body.length).toBeGreaterThan(0);
+       expect(res.body[0]).toHaveProperty("name");
+   }); 
+
+   test("/getAllUsersSki", async () => {
+       const res = await request(app).get("/api/getAllUsersSki").set('Authorization', `Bearer ${token}`);
+       expect(res.statusCode).toEqual(200);       
+   });    
+   */
 
     /*
     it('get + Bearer auth', async function () {       

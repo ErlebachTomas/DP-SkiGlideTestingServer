@@ -57,7 +57,7 @@
         }
       }
     },
-    "/checkUpdate": {
+    "/checkUser": {
       "post": {
         "description": "",
         "parameters": [
@@ -163,6 +163,10 @@
     },
     "/deleteSki": {
       "post": {
+        "tags": [
+          "Ski"
+        ],
+        "summary": "Vymaže lyži",
         "description": "",
         "parameters": [
           {
@@ -188,46 +192,73 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
       }
     },
     "/updateSki": {
       "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "ski": {
-                  "example": "any"
-                },
-                "userID": {
-                  "example": "any"
-                }
-              }
-            }
-          }
+        "tags": [
+          "Ski"
         ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/deleteAllUsersSkis": {
-      "get": {
+        "summary": "Aktualizuje lyži",
         "description": "",
         "parameters": [
           {
             "name": "user",
             "in": "query",
+            "description": "ID uživatele",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ski": {
+                  "example": "any"
+                },
+                "userID": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/deleteAllUsersSkis": {
+      "get": {
+        "tags": [
+          "Ski"
+        ],
+        "summary": "Vymaže všechny lyže uživatele",
+        "description": "",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "query",
+            "description": "ID uživatele",
+            "required": true,
             "type": "string"
           }
         ],
@@ -238,11 +269,20 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
       }
     },
     "/syncSki": {
       "post": {
+        "tags": [
+          "Ski"
+        ],
+        "summary": "Vloží lyži pokud ještě na serveru není",
         "description": "",
         "parameters": [
           {
@@ -268,7 +308,12 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
       }
     },
     "/getAllUserTests": {
@@ -385,26 +430,15 @@
     },
     "/getAllSkiRide": {
       "get": {
+        "tags": [],
         "description": "",
-        "parameters": [
-          {
-            "name": "userID",
-            "in": "query",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+        "parameters": [],
+        "responses": {}
       }
     },
     "/addSkiRide": {
       "post": {
+        "tags": [],
         "description": "",
         "parameters": [
           {
@@ -428,6 +462,7 @@
     },
     "/updateSkiRide": {
       "post": {
+        "tags": [],
         "description": "",
         "parameters": [
           {
@@ -451,6 +486,7 @@
     },
     "/deleteSkiRide": {
       "post": {
+        "tags": [],
         "description": "",
         "parameters": [
           {
@@ -474,6 +510,7 @@
     },
     "/syncSkiRide": {
       "post": {
+        "tags": [],
         "description": "",
         "parameters": [
           {
@@ -532,6 +569,10 @@
     },
     "/uploadData": {
       "post": {
+        "tags": [
+          "Tools"
+        ],
+        "summary": "Hromadný import dat",
         "description": "",
         "parameters": [
           {
@@ -571,8 +612,47 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/export": {
+      "get": {
+        "tags": [
+          "Tools"
+        ],
+        "summary": "Export všech uživatelských dat",
+        "description": "",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "query",
+            "description": "ID uživatele",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
       }
     },
     "/private": {
@@ -599,6 +679,59 @@
     },
     "/private-scoped": {
       "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/recomendacion": {
+      "post": {
+        "tags": [
+          "Recomendacion"
+        ],
+        "summary": "Doporučí nejlepší lyže pro dané podmínky",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "example": "any"
+                },
+                "userID": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "210": {
+            "description": ""
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      }
+    },
+    "/recomendacionDemoData": {
+      "post": {
         "description": "",
         "parameters": [],
         "responses": {

@@ -1,6 +1,6 @@
 const TestSession = require('../model/TestSession');
 const debug = require('debug')('myApp');
-const middleware = require('./middleware');
+const middleware = require('./generalController');
 
 
 exports.insertTestSession = async function (req, res) {

@@ -2,6 +2,7 @@ node_modules
 DP-SkiGlideTestingServer.njsproj
 DP-SkiGlideTestingServer.njsproj.user
 .env
+.env-production
 obj
 bin
 nodemonLiveServer.bat

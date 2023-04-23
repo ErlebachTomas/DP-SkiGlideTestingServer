@@ -1,2 +1,2 @@
-start chrome file:///C:/Users/Terle/OneDrive/_TUL_NS/_DP/Aplikace/SkiGlideTestingServer/DP-SkiGlideTestingServer/coverage/index.html
+# start chrome file:///C:/Users/Terle/OneDrive/_TUL_NS/_DP/Aplikace/SkiGlideTestingServer/DP-SkiGlideTestingServer/coverage/index.html
 start chrome file:///C:/Users/Terle/OneDrive/_TUL_NS/_DP/Aplikace/SkiGlideTestingServer/DP-SkiGlideTestingServer/test_report/report.html

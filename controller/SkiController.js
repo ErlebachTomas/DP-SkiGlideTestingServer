@@ -1,7 +1,6 @@
 ﻿const Ski = require('../model/Ski');
 const debug = require('debug')('myApp');
-const middleware = require('./middleware');
-
+const middleware = require('./generalController');
 
 /**
  * Vrátí všechny lyže daného uživatele 

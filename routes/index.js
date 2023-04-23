@@ -1,4 +1,6 @@
-﻿'use strict';
+﻿// @ts-check
+'use strict';
+
 var express = require('express');
 var router = express.Router();
 
@@ -11,7 +13,6 @@ router.get('/', function (req, res) {
 router.get('/info', function (req, res) {
     res.render('info', { title: 'Express' });
 });
-
 
 /**
  * Provide Auth configuration file

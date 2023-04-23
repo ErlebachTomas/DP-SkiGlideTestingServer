@@ -1,4 +1,5 @@
-﻿const mongoose = require('mongoose');
+﻿// @ts-check
+const mongoose = require('mongoose');
 
 let TestSession = new mongoose.Schema({
 

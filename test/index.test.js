@@ -9,8 +9,7 @@ describe('Environment variables', function () {
     test("vars are set and exist", async () => {
         expect(Boolean(process.env.Auth_domain)).toEqual(true)
         expect(Boolean(process.env.Auth_clientId)).toEqual(true)
-        expect(Boolean(process.env.API_IDENTIFIER)).toEqual(true)
-       
+        expect(Boolean(process.env.API_IDENTIFIER)).toEqual(true)      
 
     });
 });
