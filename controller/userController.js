@@ -26,7 +26,7 @@ exports.getUser = async function (req, res) {
     try {
         let user = loadUserByID(req.body.user_id);
 
-        /* 
+        /** 
         #swagger.tags = ['User']
         #swagger.summary = vrátí objekt uživatele
         #swagger.description = obsahuje všechna data o uživateli

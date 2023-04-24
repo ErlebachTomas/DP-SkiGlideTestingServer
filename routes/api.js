@@ -47,7 +47,7 @@ router.post('/', function (req, res) {
 
 /** verze api */
 router.get('/version', function (req, res) {
-  res.json({ version: 0.1, info: "Je dostupná nová verze aplikace" });
+  res.json({ version: 0.2, info: "Je dostupná nová verze aplikace" });
 });
 
 
@@ -77,9 +77,7 @@ router.post('/deleteSki', checkJwt, async function (req, res) {
 */
   try {
     await skiController.deleteSki(req.body.userID, req.body.ski.UUID);
-
     res.sendStatus(200);
-
   } catch (err) {
     debug(err)
     res.status(500).json(err);
@@ -185,7 +183,8 @@ router.post('/syncTestSession', checkJwt, controller.processDataBody, testSessio
 
 /* jizdy */
 
-router.get('/getAllSkiRide', skiRideController.getAllSkiRides)
+router.get('/getAllSkiRide', checkJwt, skiRideController.getAllSkiRides);
+router.get('/getAllSkiRideWithSki', checkJwt, skiRideController.getAllSkiRidesWithSki);
 
 router.post('/addSkiRide', checkJwt, controller.processDataBody, skiRideController.insertSkiRide)
 router.post('/updateSkiRide', checkJwt, controller.processDataBody, skiRideController.updateSkiRide)
@@ -455,167 +454,5 @@ router.post('/recomendacion', checkJwt, controller.processDataBody, async functi
     res.status(500).json(err);
   }
 });
-
-
-
-router.post('/recomendacionDemoData', checkJwt, async function (req, res) {
-  
-  // todo change to ISO format
-  debug(req.body)
-
-  res.json(
-    [
-      {
-        id: 2,
-        testData:
-        {
-          UUID: "UUID-2",
-          datetime: "2023-04-16T11:07:04.652Z",
-          ownerUserID: "user123",
-          airTemperature: 14,
-          snowTemperature: -4,
-          snowType: 1,
-          testType: 0,
-          humidity: 92,
-          note: "Test session 2",
-          status: "online",
-          updated_at: "2023-04-16T11:07:04.652Z",
-
-        },
-        vector: [
-          1.0933271415320283,
-          -0.9502552681394961,
-          0,
-          0,
-          1,
-          0,
-          0,
-          0,
-        ],
-        distance: 2.471784035684937,
-        angle: -0.01212111084305914,
-        skiResults: [
-          {
-            skiUUID: "ski-uuid-1",
-            skiName: "Ski 1",
-            skiDescription: "Description 1",
-            results: [
-              170,
-              721,
-            ],
-            mean: 445.5,
-            differenceFromBest: 0,
-            score: 0,
-          },
-          {
-            skiUUID: "ski-uuid-2",
-            skiName: "Ski 2",
-            skiDescription: "Description 2",
-            results: [
-              957,
-              836,
-              221,
-            ],
-            mean: 671.3333333333334,
-            differenceFromBest: 225.83333333333337,
-            score: 0.6701285855588527,
-          },
-          {
-            skiUUID: "ski-uuid-3",
-            skiName: "Ski 3",
-            skiDescription: "Description 3",
-            results: [
-              568,
-              997,
-            ],
-            mean: 782.5,
-            differenceFromBest: 337,
-            score: 1,
-          },
-        ],
-      },
-      {
-        id: 1,
-        testData: {
-          UUID: "UUID-1",
-          datetime: "Mon Apr 17 2023 09:50:56 GMT+0200 (Středoevropský letní čas)",
-          ownerUserID: "user123",
-          airTemperature: 9,
-          snowTemperature: 14,
-          snowType: 3,
-          testType: 2,
-          humidity: null,
-          note: "Test session 1",
-          status: "online",
-          updated_at: "Mon Apr 17 2023 09:50:56 GMT+0200 (Středoevropský letní čas)",
-
-        },
-        vector: [
-          0.23017413505937434,
-          1.382189480930176,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-        ],
-        distance: 2.7757795411177044,
-        angle: -0.30556159896631524,
-        skiResults: [
-          {
-            skiUUID: "ski-uuid-2",
-            skiName: "Ski 2",
-            skiDescription: "Description 2",
-            results: [
-              417,
-              683,
-              496,
-              671,
-              111,
-            ],
-            mean: 475.6,
-            differenceFromBest: 0,
-            score: 0,
-          },
-          {
-            skiUUID: "ski-uuid-1",
-            skiName: "Ski 1",
-            skiDescription: "Description 1",
-            results: [
-              711,
-              360,
-              38,
-              451,
-              988,
-              473,
-            ],
-            mean: 503.5,
-            differenceFromBest: 27.899999999999977,
-            score: 0.15771622385528536,
-          },
-          {
-            skiUUID: "ski-uuid-3",
-            skiName: "Ski 3",
-            skiDescription: "Description 3",
-            results: [
-              494,
-              811,
-            ],
-            mean: 652.5,
-            differenceFromBest: 176.89999999999998,
-            score: 1,
-          },
-        ],
-      },
-    ]
-
-
-  );
-
-
-});
-
-
 
 module.exports = router;

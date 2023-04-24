@@ -27,6 +27,6 @@ let Ski = new mongoose.Schema({
         require: false,
     }
 
-});
+}, { toObject: { virtuals: true }, toJSON: { virtuals: true } });
 
 module.exports = mongoose.model('Ski', Ski);

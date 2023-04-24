@@ -1,14 +1,18 @@
 ﻿const Ski = require('../model/Ski');
 const debug = require('debug')('myApp');
 const middleware = require('./generalController');
-
+const SkiRide = require('../model/SkiRide');
 /**
  * Vrátí všechny lyže daného uživatele 
  * @param {any} req
  * @param {any} res
  */
 exports.getAllUsersSki = async function (req, res) {
-
+ /**
+ * #swagger.tags = ['Ski']
+ * #swagger.security = [{
+ *     "apiKeyAuth": []
+ * }] */
     debug("nacitam data pro " + req.query.user)
 
     try {
@@ -22,7 +26,11 @@ exports.getAllUsersSki = async function (req, res) {
 };
 /** Načte lyži z dbs */
 exports.getSki = async function (req, res) {
-
+ /**
+ * #swagger.tags = ['Ski']
+ * #swagger.security = [{
+ *     "apiKeyAuth": []
+ * }] */
     try {
         let ski = loadSki(req.userID, req.skiName)
         res.json(ski);
@@ -35,7 +43,11 @@ exports.getSki = async function (req, res) {
  * Vloží lyži 
  **/
 exports.insertSki = async function (req, res) {
-
+ /**
+ * #swagger.tags = ['Ski']
+ * #swagger.security = [{
+ *     "apiKeyAuth": []
+ * }] */
     middleware.try(res, async function () {
         let json = req.body.ski
         json["ownerUserID"] = req.body.userID;
@@ -76,13 +88,16 @@ exports.addSkiIfNotExist = async function (userID, ski) {
    
 }
 /**
- * Vymaže záznam lyže z db
+ * Vymaže záznam lyže společně se všemi záznamy SkiRide
  * @param {String} userID
  * @param {String} UUID
  * @returns {Ski} vymazaná lyže
  * @throws {Exception} err
  * */
-exports.deleteSki = async function (userID, UUID) {
-    return await Ski.findOneAndRemove({ UUID: UUID, ownerUserID: userID });
-    
+exports.deleteSki = async function (userID, UUID) {  
+     const ski = await Ski.findOneAndRemove({ UUID: UUID, ownerUserID: userID });
+     if (ski) {
+         await SkiRide.deleteMany({ skiID: ski.UUID });
+     } 
+     return ski;    
 }

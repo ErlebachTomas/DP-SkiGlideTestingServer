@@ -15,7 +15,7 @@ let SkiRide = new mongoose.Schema({
     },
     skiID: {
         type: String,
-        required: true
+        required: true,        
     },
     result: {
         type: Number,
@@ -34,10 +34,17 @@ let SkiRide = new mongoose.Schema({
         require: false,
     }
 
-});
+}, { toObject: { virtuals: true }, toJSON: { virtuals: true } });
 
 SkiRide.virtual('value').get(function () {
     return this.result;
+});
+
+SkiRide.virtual('ski', {
+    ref: 'Ski',
+    localField: 'skiID',
+    foreignField: 'UUID',
+    justOne: true
 });
 
 module.exports = mongoose.model('SkiRide', SkiRide);

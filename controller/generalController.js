@@ -75,7 +75,7 @@ exports.try = async function (res, lambdaFun, status = 200) {
             
     } catch (err) {
         debug(err);
-        /* #swagger.responses[500] = {
+        /** #swagger.responses[500] = {
             description: 'Server error' }*/
 
         res.status(500).json(err);
