@@ -157,11 +157,10 @@ exports.MLR = function (X, y, targetPoint) {
  */
 exports.MLRmodel = function (X, y) {
   
-    const model = new MLR(X, y);
-   // model.coefficientOfDetermination(X, y)
-
-   // TODO r2 
-    return {
+    const model = new MLR(X, y);  
+   // TODO r2 calculate model.coefficientOfDetermination(X, y)
+    
+   return {
         "model" : model,
         "r2": null
     }

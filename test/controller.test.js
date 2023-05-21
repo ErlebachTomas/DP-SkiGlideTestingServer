@@ -1,7 +1,7 @@
 ﻿const middleware = require('../controller/generalController');
 const userController = require('../controller/userController');
 const skiController = require('../controller/skiController');
-const testSessionController = require('../controller/testSessionController');
+const testSessionController = require('../controller/TestSessionController');
 const skiRideController = require('../controller/skiRideController');
 const User = require('../model/User');
 

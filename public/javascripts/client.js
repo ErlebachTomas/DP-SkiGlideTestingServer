@@ -1,5 +1,33 @@
 ﻿'use strict';
-let auth0 = null; // variable hold the Auth0 client object
+let auth0 = null; // proměnná klienta Auth0
+ 
+
+/** LOkalizace stránky */
+$(document).ready(async function() {
+    
+    if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') { 
+        $('#alert-div').removeClass('hidden');
+    }
+        
+        var language = navigator.language || navigator.userLanguage;          
+        var localeFile; 
+
+        if (language === 'cs' || language === 'cs-CZ') {
+            localeFile = 'cs.json';
+
+        } else {
+            localeFile = 'en.json';
+        }
+        $.getJSON(localeFile, function(json) {            
+            
+            $('[localization-key]').each(function() {
+                let key = $(this).attr('localization-key');
+                let translation = json[key];
+                $(this).html(translation);
+            });
+        });          
+    }  
+);  
 
 /* Single page */
 $(async function () {
@@ -20,9 +48,19 @@ $(async function () {
 
 
     $("#uploadDataForm").submit(function (e) {
-        e.preventDefault(); //prevent Default functionality
+        e.preventDefault(); //prevent Default 
         upload();
     });
+
+    $("#btn-export").click(async function () {             
+        let data = await callApi("/api/export");
+        console.log(data);        
+        const jsonString = JSON.stringify(data);
+        const jsonBlob = new Blob([jsonString], { type: 'application/json' });
+        const url = URL.createObjectURL(jsonBlob);        
+        window.open(url, '_blank');
+    });
+
 });
 
 /**
@@ -35,12 +73,13 @@ async function checkIfUserIsAuthenticated() {
     const shouldParseResult = query.includes("code=") && query.includes("state=");
 
     if (shouldParseResult) {
-        // This will indicate that an authentication result is present and needs to be parsed
+       
         console.log("redirect");
         try {
 
             await auth0.handleRedirectCallback();
             console.log("Logged in!");
+            $("#btn-export").prop('disabled', false);
 
         } catch (err) {
             console.log("Error parsing redirect:", err);
@@ -54,15 +93,13 @@ async function checkIfUserIsAuthenticated() {
 }
 
 /**
- * Initialize the auth0 variable
+ * Inicializace proměnné auth0
  * */
 async function configureClient() {
 
     const response = await fetch("/auth_config.json");
     const config = await response.json();
-
-    //console.log(config);
-
+   
     auth0 = await createAuth0Client({
         domain: config.domain,
         client_id: config.clientId,

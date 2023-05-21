@@ -79,10 +79,9 @@ describe('calculateZScore', () => {
         let result = st.calculateZScore(data)
         for (let i = 0; i < result.length; i++) {
             expect(result[i]).toBeCloseTo(expected[i], 1);
-        }
-        // TODO fix precision error decimal.js
+        }        
       }
-    );
+    );   
 
     test('empty array', () => {
         const data = [];

@@ -10,7 +10,7 @@ const similarity = require('../middleware/similarity');
 const controller = require('../controller/generalController');
 const userController = require('../controller/userController');
 const skiController = require('../controller/skiController');
-const testSessionController = require('../controller/testSessionController');
+const testSessionController = require('../controller/TestSessionController');
 const skiRideController = require('../controller/skiRideController');
 
 /* auth */
@@ -47,7 +47,10 @@ router.post('/', function (req, res) {
 
 /** verze api */
 router.get('/version', function (req, res) {
-  res.json({ version: 0.2, info: "Je dostupná nová verze aplikace" });
+  res.json({ version: process.env.VERSION || 1.0, 
+    info: "\n Je dostupná nová verze aplikace, můžete ji stáhnout z úložiště na platformě GitHub: https://github.com/ErlebachTomas/DP-SkiGlideTestingApp/releases \n\nEnglish translation\n\n A new version of the app is available; you can download it from the GitHub repository: https://github.com/ErlebachTomas/DP-SkiGlideTestingApp/releases" 
+    
+     });
 });
 
 
@@ -173,8 +176,7 @@ router.post('/syncSki', checkJwt, async function (req, res) {
 });
 
 /* ============ TESTY =================  */
-// TODO token
-router.get('/getAllUserTests', testSessionController.getAllUserTests)
+router.get('/getAllUserTests',checkJwt, testSessionController.getAllUserTests)
 
 router.post('/addTestSession', checkJwt, controller.processDataBody, testSessionController.insertTestSession)
 router.post('/updateTestSession', checkJwt, controller.processDataBody, testSessionController.updateTestSession)
@@ -443,7 +445,7 @@ router.post('/recomendacion', checkJwt, controller.processDataBody, async functi
       res.status(200).json(r)
     } else {
         /* #swagger.responses[210] = {
-        description: 'Chybějící tréningová data (nedostatek testů pro predikci)' }*/
+        description: 'Chybějí trénovací data (nedostatek testů pro predikci)' }*/
         res.status(210).json(r)
     }  
   } catch (err) {

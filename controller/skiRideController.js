@@ -109,7 +109,7 @@ exports.getAllSkiRidesWithSki = async function (req, res) {
   const testID = req.query.testID;
   try {
       let result = await SkiRide.find({ ownerUserID: userID, testSessionID: testID })
-      .populate('ski'); // join na "skiID"
+      .populate('ski'); // join na "skiID"  
       res.json(result);
   } catch (err) {
       console.error(err);

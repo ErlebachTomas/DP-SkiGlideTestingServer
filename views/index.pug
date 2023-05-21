@@ -3,11 +3,15 @@
 block content 
 
   main.container.pt-2.mx-auto(style='width: 600px;')
+    #alert-div.hidden.alert.alert-danger.alert-dismissible.fade.show(role='alert')      
+      p(localization-key="ErrMessage")
+    #alertInfo-div.hidden.alert.alert-info.alert-dismissible.fade.show     
+       
     section
-      h1 Home page        
-      button#btn-login.btn.btn-lg.btn-block.m-2.btn-primary(disabled='true' onclick='login()') Log in
-      button#btn-logout.btn.btn-lg.btn-block.m-2.btn-secondary(disabled='true' onclick='logout()') Log out
-      button#btn-export.btn.btn-lg.m-2(disabled='true') Export dat 
+      h1(localization-key="home-page") Home page        
+      button#btn-login.btn.btn-lg.btn-block.m-2.btn-primary(disabled='true' onclick='login()' localization-key="login") Log in
+      button#btn-logout.btn.btn-lg.btn-block.m-2.btn-secondary(disabled='true' onclick='logout()' localization-key="logout") Log out
+      button#btn-export.btn.btn-lg.m-2(disabled='true') Export 
         i.fa-solid.fa-download
       div#info.mx-auto 
 
