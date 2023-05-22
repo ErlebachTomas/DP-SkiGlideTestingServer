@@ -11,3 +11,6 @@ test.bat
 coverage
 test_report
 Generate doc.bat
+test-result.bat
+Generate doc.bat
+.bash_logout
