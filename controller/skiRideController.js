@@ -1,4 +1,3 @@
-// @ts-check 
 const SkiRide = require('../model/SkiRide');
 const debug = require('debug')('myApp');
 const controller = require('./generalController');
@@ -109,8 +108,28 @@ exports.getAllSkiRidesWithSki = async function (req, res) {
   const testID = req.query.testID;
   try {
       let result = await SkiRide.find({ ownerUserID: userID, testSessionID: testID })
-      .populate('ski'); // join na "skiID"  
-      res.json(result);
+      .populate('ski'); // join on "skiID"  
+      debug(result);
+
+      // Transforming result data
+      let transformedResult = result.map(item => ({
+          skiRide: {
+              _id: item._id,
+              UUID: item.UUID,
+              testSessionID: item.testSessionID,
+              skiID: item.skiID,
+              result: item.result,
+              note: item.note,
+              status: item.status,
+              updated_at: item.updated_at,
+              __v: item.__v,
+              value: item.value,
+          },
+          ski: item.ski,
+          id: item.id
+      }));
+
+      res.json(transformedResult);
   } catch (err) {
       console.error(err);
       res.status(500).json(err);
