@@ -37,7 +37,7 @@
     "mathjs": "^11.7.0",
     "ml-distance": "^4.0.0",
     "ml-regression-multivariate-linear": "^2.0.4",
-    "mongoose": "^6.10.4",
+    "mongoose": "^6.11.3",
     "morgan": "^1.10.0",
     "pug": "^2.0.4",
     "serve-favicon": "^2.5.0",
